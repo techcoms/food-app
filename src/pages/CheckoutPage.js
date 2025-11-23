@@ -24,12 +24,19 @@ export default function CheckoutPage(){
   return (
     <div>
       <h3>Checkout (POC)</h3>
-      <p>For this POC, paste items JSON (e.g. [{"name":"Pizza","qty":1,"price":250}])</p>
+
+      {/* show the JSON example as a literal string inside a code block */}
+      <p>For this POC, paste items JSON (example):</p>
+      <pre style={{background:'#f6f6f6', padding:8, borderRadius:6}}>
+{`[{"name":"Pizza","qty":1,"price":250}]`}
+      </pre>
+
+      <p>Paste items JSON (e.g. the example above)</p>
       <textarea rows={6} cols={60} value={itemsText} onChange={e=>setItemsText(e.target.value)} />
-      <div>
+      <div style={{marginTop:8}}>
         <input placeholder="Customer name" value={name} onChange={e=>setName(e.target.value)} />
       </div>
-      <button disabled={loading} onClick={submit}>Place Order</button>
+      <button style={{marginTop:8}} disabled={loading} onClick={submit}>Place Order</button>
     </div>
   );
 }
