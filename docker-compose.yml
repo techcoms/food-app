@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:6
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  orders:
+    build: ./orders
+    ports:
+      - "4002:4002"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fooddb
+    depends_on:
+      - mongo
+
+  payments:
+    build: ./payments
+    ports:
+      - "4003:4003"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fooddb
+    depends_on:
+      - mongo
+
+  options:
+    build: ./options
+    ports:
+      - "4004:4004"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/fooddb
+    depends_on:
+      - mongo
+
+  images:
+    build: ./images
+    ports:
+      - "4005:4005"
+    depends_on:
+      - mongo
+
+volumes:
+  mongo-data:
