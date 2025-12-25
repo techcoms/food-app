@@ -1,16 +1,9 @@
-const mongoose = require('mongoose');
-const ItemSchema = new mongoose.Schema({
-  foodId: String,
-  name: String,
-  qty: { type: Number, default: 1 },
-  price: Number
-});
+const mongoose = require('./Model');
 
-const OrderSchema = new mongoose.Schema({
-  items: [ItemSchema],
+const orderSchema = new mongoose.Schema({
+  items: Array,
   total: Number,
-  status: { type: String, default: 'created' },
-  createdAt: { type: Date, default: Date.now }
-});
+  status: { type: String, default: 'CREATED' },
+}, { timestamps: true });
 
-module.exports = mongoose.model('Order', OrderSchema);
+module.exports = mongoose.model('Order', orderSchema);
