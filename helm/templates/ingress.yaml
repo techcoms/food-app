@@ -1,0 +1,68 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "food-app.fullname" . }}-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          # -------------------------
+          # Frontend (React)
+          # -------------------------
+          - path: /()(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "food-app.fullname" . }}-frontend
+                port:
+                  number: 80
+
+          # -------------------------
+          # Orders API
+          # -------------------------
+          - path: /api/orders(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "food-app.fullname" . }}-orders
+                port:
+                  number: {{ .Values.orders.port }}
+
+          # -------------------------
+          # Payments API
+          # -------------------------
+          - path: /api/payments(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "food-app.fullname" . }}-payments
+                port:
+                  number: {{ .Values.payments.port }}
+
+          # -------------------------
+          # Options API
+          # -------------------------
+          - path: /api/options(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "food-app.fullname" . }}-options
+                port:
+                  number: {{ .Values.options.port }}
+
+          # -------------------------
+          # Images API (upload + static)
+          # -------------------------
+          - path: /api/images(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "food-app.fullname" . }}-images
+                port:
+                  number: {{ .Values.images.port }}
+{{- end }}
