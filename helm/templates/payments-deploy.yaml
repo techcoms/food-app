@@ -1,0 +1,37 @@
+{{- if .Values.payments.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "food-app.fullname" . }}-payments
+spec:
+  replicas: {{ .Values.payments.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "food-app.fullname" . }}-payments
+  template:
+    metadata:
+      labels:
+        app: {{ include "food-app.fullname" . }}-payments
+    spec:
+      containers:
+        - name: payments
+          image: "{{ .Values.payments.image.repository }}:{{ .Values.payments.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.payments.port }}
+          env:
+            - name: MONGO_URI
+              value: {{ quote .Values.commonEnv.MONGO_URI }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "food-app.fullname" . }}-payments
+spec:
+  selector:
+    app: {{ include "food-app.fullname" . }}-payments
+  ports:
+    - port: {{ .Values.payments.port }}
+      targetPort: {{ .Values.payments.port }}
+  type: ClusterIP
+{{- end }}
