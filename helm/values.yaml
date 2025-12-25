@@ -1,9 +1,6 @@
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
-# -------------------------
-# MongoDB
-# -------------------------
 mongo:
   enabled: true
   image:
@@ -15,9 +12,6 @@ mongo:
     enabled: true
     storage: 5Gi
 
-# -------------------------
-# Frontend
-# -------------------------
 frontend:
   enabled: true
   image:
@@ -25,13 +19,9 @@ frontend:
     tag: "1.0.0"
   replicas: 2
   service:
-    type: ClusterIP
     port: 80
   containerPort: 3000
 
-# -------------------------
-# Orders
-# -------------------------
 orders:
   enabled: true
   image:
@@ -40,9 +30,6 @@ orders:
   replicas: 1
   port: 4002
 
-# -------------------------
-# Payments
-# -------------------------
 payments:
   enabled: true
   image:
@@ -51,9 +38,6 @@ payments:
   replicas: 1
   port: 4003
 
-# -------------------------
-# Options
-# -------------------------
 options:
   enabled: true
   image:
@@ -62,9 +46,6 @@ options:
   replicas: 1
   port: 4004
 
-# -------------------------
-# Images
-# -------------------------
 images:
   enabled: true
   image:
@@ -73,15 +54,6 @@ images:
   replicas: 1
   port: 4005
 
-# -------------------------
-# Common Environment Variables
-# -------------------------
-commonEnv:
-  MONGO_URI: "mongodb://mongo:27017/fooddb"
-
-# -------------------------
-# Ingress
-# -------------------------
 ingress:
   enabled: true
   className: nginx
