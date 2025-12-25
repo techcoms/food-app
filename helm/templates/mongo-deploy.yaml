@@ -1,52 +1,67 @@
 {{- if .Values.mongo.enabled }}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ include "food-app.fullname" . }}-mongo-pvc
-spec:
-  accessModes: ["ReadWriteOnce"]
-  resources:
-    requests:
-      storage: {{ .Values.mongo.pvc.storage }}
----
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "food-app.fullname" . }}-mongo
 spec:
+  serviceName: {{ include "food-app.fullname" . }}-mongo
   replicas: 1
   selector:
     matchLabels:
       app: {{ include "food-app.fullname" . }}-mongo
+      component: mongo
   template:
     metadata:
       labels:
         app: {{ include "food-app.fullname" . }}-mongo
+        component: mongo
     spec:
       containers:
         - name: mongo
           image: "{{ .Values.mongo.image.repository }}:{{ .Values.mongo.image.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | default "IfNotPresent" }}
           args: ["--bind_ip_all"]
           ports:
             - containerPort: 27017
           volumeMounts:
             - name: mongo-data
               mountPath: /data/db
-      volumes:
-        - name: mongo-data
-          persistentVolumeClaim:
-            claimName: {{ include "food-app.fullname" . }}-mongo-pvc
+          readinessProbe:
+            tcpSocket:
+              port: 27017
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 27017
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+  volumeClaimTemplates:
+    - metadata:
+        name: mongo-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: {{ .Values.mongo.pvc.storage }}
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "food-app.fullname" . }}-mongo
 spec:
+  clusterIP: None
   selector:
     app: {{ include "food-app.fullname" . }}-mongo
+    component: mongo
   ports:
     - port: 27017
       targetPort: 27017
-  type: ClusterIP
 {{- end }}
