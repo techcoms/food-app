@@ -1,60 +1,88 @@
-replicaCount: 1
-
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
+# -------------------------
+# MongoDB
+# -------------------------
 mongo:
   enabled: true
   image:
     repository: mongo
-    tag: "6"
+    tag: "6.0"
+  service:
+    port: 27017
   pvc:
     enabled: true
     storage: 5Gi
 
+# -------------------------
+# Frontend
+# -------------------------
 frontend:
   enabled: true
   image:
     repository: techcoms/food-frontend
-    tag: latest
+    tag: "1.0.0"
   replicas: 2
   service:
-    type: NodePort
+    type: ClusterIP
     port: 80
-    nodePort: 30080
+  containerPort: 3000
 
+# -------------------------
+# Orders
+# -------------------------
 orders:
   enabled: true
   image:
     repository: techcoms/orders
-    tag: latest
+    tag: "1.0.0"
   replicas: 1
   port: 4002
 
+# -------------------------
+# Payments
+# -------------------------
 payments:
   enabled: true
   image:
     repository: techcoms/payments
-    tag: latest
+    tag: "1.0.0"
   replicas: 1
   port: 4003
 
+# -------------------------
+# Options
+# -------------------------
 options:
   enabled: true
   image:
     repository: techcoms/options
-    tag: latest
+    tag: "1.0.0"
   replicas: 1
   port: 4004
 
+# -------------------------
+# Images
+# -------------------------
 images:
   enabled: true
   image:
     repository: techcoms/images
-    tag: latest
+    tag: "1.0.0"
   replicas: 1
   port: 4005
 
+# -------------------------
+# Common Environment Variables
+# -------------------------
 commonEnv:
   MONGO_URI: "mongodb://mongo:27017/fooddb"
 
+# -------------------------
+# Ingress
+# -------------------------
+ingress:
+  enabled: true
+  className: nginx
+  host: food.example.com
