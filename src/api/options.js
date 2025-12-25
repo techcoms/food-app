@@ -1,3 +1,4 @@
-import axios from 'axios';
-const base = process.env.REACT_APP_OPTIONS_URL || 'http://localhost:4004';
-export const getOptions = () => axios.get(`${base}/api/options`).then(r => r.data);
+import api from './client';
+
+export const getOptions = () =>
+  api.get('/api/options').then(res => res.data);
