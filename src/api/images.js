@@ -1,5 +1,9 @@
-import axios from 'axios';
-const base = process.env.REACT_APP_IMAGES_URL || 'http://localhost:4005';
+import api from './client';
+
 export const uploadImage = (formData) =>
-  axios.post(`${base}/api/images`, formData, { headers: { 'Content-Type': 'multipart/form-data' } }).then(r => r.data);
-export const getImageUrl = (filename) => `${base}/images/${filename}`;
+  api.post('/api/images', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  }).then(res => res.data);
+
+export const getImageUrl = (filename) =>
+  `/api/images/${filename}`;
