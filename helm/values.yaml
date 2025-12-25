@@ -15,7 +15,7 @@ mongo:
 frontend:
   enabled: true
   image:
-    repository: YOUR_DOCKERHUB/food-frontend
+    repository: techcoms/food-frontend
     tag: latest
   replicas: 2
   service:
@@ -26,7 +26,7 @@ frontend:
 orders:
   enabled: true
   image:
-    repository: YOUR_DOCKERHUB/orders
+    repository: techcoms/orders
     tag: latest
   replicas: 1
   port: 4002
@@ -34,7 +34,7 @@ orders:
 payments:
   enabled: true
   image:
-    repository: YOUR_DOCKERHUB/payments
+    repository: techcoms/payments
     tag: latest
   replicas: 1
   port: 4003
@@ -42,7 +42,7 @@ payments:
 options:
   enabled: true
   image:
-    repository: YOUR_DOCKERHUB/options
+    repository: techcoms/options
     tag: latest
   replicas: 1
   port: 4004
@@ -50,10 +50,11 @@ options:
 images:
   enabled: true
   image:
-    repository: YOUR_DOCKERHUB/images
+    repository: techcoms/images
     tag: latest
   replicas: 1
   port: 4005
 
 commonEnv:
   MONGO_URI: "mongodb://mongo:27017/fooddb"
+
