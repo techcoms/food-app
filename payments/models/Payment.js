@@ -1,11 +1,9 @@
-const mongoose = require('mongoose');
-const PaymentSchema = new mongoose.Schema({
+const mongoose = require('./Model');
+
+const paymentSchema = new mongoose.Schema({
   orderId: String,
   amount: Number,
-  method: String,
   status: String,
-  txId: String,
-  createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Payment', PaymentSchema);
+module.exports = mongoose.model('Payment', paymentSchema);
