@@ -1,0 +1,37 @@
+{{- if .Values.options.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "food-app.fullname" . }}-options
+spec:
+  replicas: {{ .Values.options.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "food-app.fullname" . }}-options
+  template:
+    metadata:
+      labels:
+        app: {{ include "food-app.fullname" . }}-options
+    spec:
+      containers:
+        - name: options
+          image: "{{ .Values.options.image.repository }}:{{ .Values.options.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.options.port }}
+          env:
+            - name: MONGO_URI
+              value: {{ quote .Values.commonEnv.MONGO_URI }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "food-app.fullname" . }}-options
+spec:
+  selector:
+    app: {{ include "food-app.fullname" . }}-options
+  ports:
+    - port: {{ .Values.options.port }}
+      targetPort: {{ .Values.options.port }}
+  type: ClusterIP
+{{- end }}
