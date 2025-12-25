@@ -1,5 +1,4 @@
 {{- if .Values.payments.enabled }}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,29 +8,45 @@ spec:
   selector:
     matchLabels:
       app: {{ include "food-app.fullname" . }}-payments
+      component: payments
   template:
     metadata:
       labels:
         app: {{ include "food-app.fullname" . }}-payments
+        component: payments
     spec:
       containers:
         - name: payments
           image: "{{ .Values.payments.image.repository }}:{{ .Values.payments.image.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | default "IfNotPresent" }}
           ports:
             - containerPort: {{ .Values.payments.port }}
           env:
             - name: MONGO_URI
-              value: {{ quote .Values.commonEnv.MONGO_URI }}
+              value: {{ .Values.commonEnv.MONGO_URI | quote }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.payments.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.payments.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "food-app.fullname" . }}-payments
 spec:
+  type: ClusterIP
   selector:
     app: {{ include "food-app.fullname" . }}-payments
+    component: payments
   ports:
     - port: {{ .Values.payments.port }}
       targetPort: {{ .Values.payments.port }}
-  type: ClusterIP
 {{- end }}
