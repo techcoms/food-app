@@ -1,5 +1,4 @@
 {{- if .Values.options.enabled }}
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -9,29 +8,45 @@ spec:
   selector:
     matchLabels:
       app: {{ include "food-app.fullname" . }}-options
+      component: options
   template:
     metadata:
       labels:
         app: {{ include "food-app.fullname" . }}-options
+        component: options
     spec:
       containers:
         - name: options
           image: "{{ .Values.options.image.repository }}:{{ .Values.options.image.tag }}"
+          imagePullPolicy: {{ .Values.imagePullPolicy | default "IfNotPresent" }}
           ports:
             - containerPort: {{ .Values.options.port }}
           env:
             - name: MONGO_URI
-              value: {{ quote .Values.commonEnv.MONGO_URI }}
+              value: {{ .Values.commonEnv.MONGO_URI | quote }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.options.port }}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.options.port }}
+            initialDelaySeconds: 15
+            periodSeconds: 20
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "food-app.fullname" . }}-options
 spec:
+  type: ClusterIP
   selector:
     app: {{ include "food-app.fullname" . }}-options
+    component: options
   ports:
     - port: {{ .Values.options.port }}
       targetPort: {{ .Values.options.port }}
-  type: ClusterIP
 {{- end }}
