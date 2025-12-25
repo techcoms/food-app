@@ -1,0 +1,59 @@
+replicaCount: 1
+
+imagePullSecrets: []
+imagePullPolicy: IfNotPresent
+
+mongo:
+  enabled: true
+  image:
+    repository: mongo
+    tag: "6"
+  pvc:
+    enabled: true
+    storage: 5Gi
+
+frontend:
+  enabled: true
+  image:
+    repository: YOUR_DOCKERHUB/food-frontend
+    tag: latest
+  replicas: 2
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 30080
+
+orders:
+  enabled: true
+  image:
+    repository: YOUR_DOCKERHUB/orders
+    tag: latest
+  replicas: 1
+  port: 4002
+
+payments:
+  enabled: true
+  image:
+    repository: YOUR_DOCKERHUB/payments
+    tag: latest
+  replicas: 1
+  port: 4003
+
+options:
+  enabled: true
+  image:
+    repository: YOUR_DOCKERHUB/options
+    tag: latest
+  replicas: 1
+  port: 4004
+
+images:
+  enabled: true
+  image:
+    repository: YOUR_DOCKERHUB/images
+    tag: latest
+  replicas: 1
+  port: 4005
+
+commonEnv:
+  MONGO_URI: "mongodb://mongo:27017/fooddb"
