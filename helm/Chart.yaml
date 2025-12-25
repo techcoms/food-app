@@ -1,0 +1,10 @@
+apiVersion: v2
+name: food-app
+description: Helm chart for Food Delivery microservices (frontend, orders, payments, options, images, mongo)
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - food
+  - microservices
+  - mongodb
