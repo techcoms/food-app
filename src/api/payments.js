@@ -1,4 +1,7 @@
-import axios from 'axios';
-const base = process.env.REACT_APP_PAYMENTS_URL || 'http://localhost:4003';
-export const charge = (payload) => axios.post(`${base}/api/payments/charge`, payload).then(r => r.data);
-export const getPayments = () => axios.get(`${base}/api/payments`).then(r => r.data);
+import api from './client';
+
+export const charge = (payload) =>
+  api.post('/api/payments/charge', payload).then(res => res.data);
+
+export const getPayments = () =>
+  api.get('/api/payments').then(res => res.data);
