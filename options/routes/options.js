@@ -1,16 +1,17 @@
 const express = require('express');
-const router = express.Router();
 const Option = require('../models/Option');
 
-router.get('/', async (req,res)=> {
-  const items = await Option.find();
-  res.json(items);
+const router = express.Router();
+
+router.get('/api/options', async (req, res) => {
+  const options = await Option.find();
+  res.json(options);
 });
 
-router.post('/', async (req,res)=> {
-  const it = new Option(req.body);
-  await it.save();
-  res.status(201).json(it);
+router.post('/api/options', async (req, res) => {
+  const option = new Option(req.body);
+  await option.save();
+  res.status(201).json(option);
 });
 
 module.exports = router;
