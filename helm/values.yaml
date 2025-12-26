@@ -38,7 +38,7 @@ payments:
   enabled: true
   image:
     repository: techcoms/payments
-    tag: "1.0.0"
+    tag: "latest"
   replicas: 1
   port: 4003
 
@@ -46,7 +46,7 @@ options:
   enabled: true
   image:
     repository: techcoms/options
-    tag: "1.0.0"
+    tag: "latest"
   replicas: 1
   port: 4004
 
@@ -54,7 +54,7 @@ images:
   enabled: true
   image:
     repository: techcoms/images
-    tag: "1.0.0"
+    tag: "latest"
   replicas: 1
   port: 4005
 
@@ -65,4 +65,3 @@ ingress:
 
 commonEnv:
   MONGO_URI: "mongodb://food-app-mongo:27017/fooddb"
-
