@@ -21,6 +21,8 @@ frontend:
   service:
     port: 80
   containerPort: 3000
+env:
+    REACT_APP_API_BASE_URL: ""
 
 orders:
   enabled: true
@@ -62,3 +64,4 @@ ingress:
 # 🔥 THIS WAS MISSING
 commonEnv:
   MONGO_URI: "mongodb://food-app-mongo:27017/fooddb"
+
