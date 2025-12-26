@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - add-frontend
   workflow_dispatch:
 
 env:
@@ -23,17 +22,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      # ---------- Frontend ----------
-      - name: Build & Push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          push: true
-          tags: |
-            techcoms/food-frontend:latest
-            techcoms/food-frontend:${{ github.sha }}
-
+          
       # ---------- Orders ----------
       - name: Build & Push Orders
         uses: docker/build-push-action@v5
