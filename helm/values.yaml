@@ -64,5 +64,7 @@ ingress:
   host: food.example.com
 
 commonEnv:
-  MONGO_URI: "mongodb://food-app-mongo:27017/fooddb"
+  MONGO_URI: "mongodb://food-app-food-app-mongo:27017/fooddb"
+
+
 
