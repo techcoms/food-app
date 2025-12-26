@@ -58,3 +58,7 @@ ingress:
   enabled: true
   className: nginx
   host: food.example.com
+
+# 🔥 THIS WAS MISSING
+commonEnv:
+  MONGO_URI: "mongodb://food-app-mongo:27017/fooddb"
