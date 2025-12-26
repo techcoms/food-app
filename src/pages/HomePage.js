@@ -3,29 +3,41 @@ import CategoryList from '../components/CategoryList';
 import FoodList from '../components/FoodList';
 import Cart from '../components/Cart';
 
-export default function HomePage(){
+export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [cart, setCart] = useState([]);
 
-  function addToCart(item){
-    // add basic qty / price
-    const found = cart.find(c => c.id === (item.id || item._id) && c.name === item.name);
-    if (found) {
-      setCart(cart.map(c => c === found ? {...c, qty: (c.qty||1) + 1} : c));
-    } else {
-      setCart([...cart, {...item, qty:1}]);
-    }
+  function addToCart(item) {
+    setCart(prev => {
+      const id = item.id || item._id;
+      const found = prev.find(c => (c.id || c._id) === id);
+
+      if (found) {
+        return prev.map(c =>
+          (c.id || c._id) === id
+            ? { ...c, qty: (c.qty || 1) + 1 }
+            : c
+        );
+      }
+
+      return [...prev, { ...item, qty: 1 }];
+    });
   }
 
-  function removeItem(idx){
-    setCart(cart.filter((_,i)=>i!==idx));
+  function removeItem(id) {
+    setCart(prev => prev.filter(c => (c.id || c._id) !== id));
   }
 
   return (
     <div className="container">
       <CategoryList onSelect={setSelectedCategory} />
-      <FoodList categoryId={selectedCategory ? selectedCategory._id : null} addToCart={addToCart} />
-      <div style={{width:280}}>
+
+      <FoodList
+        categoryId={selectedCategory?._id}
+        addToCart={addToCart}
+      />
+
+      <div style={{ width: 280 }}>
         <Cart items={cart} removeItem={removeItem} />
       </div>
     </div>
