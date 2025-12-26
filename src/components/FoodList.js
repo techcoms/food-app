@@ -4,20 +4,35 @@ import axios from 'axios';
 
 export default function FoodList({ categoryId, addToCart }) {
   const [foods, setFoods] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // For demo, backend could expose /api/foods?categoryId=...
-    const url = process.env.REACT_APP_ORDERS_URL ? `${process.env.REACT_APP_ORDERS_URL}/api/foods` : '/api/foods';
-    axios.get(url, { params: { categoryId } })
-      .then(res => setFoods(res.data || []))
-      .catch(() => setFoods([]));
+    setLoading(true);
+
+    axios
+      .get('/api/foods', { params: { categoryId } })
+      .then((res) => setFoods(res.data || []))
+      .catch(() => setFoods([]))
+      .finally(() => setLoading(false));
   }, [categoryId]);
 
   return (
     <div className="content">
       <h3>Menu</h3>
-      {foods.length === 0 && <p>No items available</p>}
-      {foods.map(f => <FoodItem key={f._id || f.id} food={f} addToCart={addToCart} />)}
+
+      {loading && <p>Loading...</p>}
+
+      {!loading && foods.length === 0 && (
+        <p>No items available</p>
+      )}
+
+      {foods.map((f) => (
+        <FoodItem
+          key={f._id || f.id}
+          food={f}
+          addToCart={addToCart}
+        />
+      ))}
     </div>
   );
 }
