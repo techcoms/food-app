@@ -21,7 +21,9 @@ frontend:
   service:
     port: 80
   containerPort: 3000
-env:
+
+  # ✅ FIXED LOCATION
+  env:
     REACT_APP_API_BASE_URL: ""
 
 orders:
@@ -61,7 +63,5 @@ ingress:
   className: nginx
   host: food.example.com
 
-# 🔥 THIS WAS MISSING
 commonEnv:
   MONGO_URI: "mongodb://food-app-mongo:27017/fooddb"
-
