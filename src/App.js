@@ -18,6 +18,7 @@ function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/payments" element={<PaymentsPage />} />
+          <Route path="*" element={<div>Page not found</div>} />
         </Routes>
       </main>
     </div>
