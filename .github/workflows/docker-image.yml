@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - add-frontend
   workflow_dispatch:
 
 env:
@@ -15,10 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout backend code (main)
+      - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: main
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -26,23 +23,17 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # ---------------- Frontend (from add-frontend branch) ----------------
-      - name: Checkout frontend branch
-        uses: actions/checkout@v4
-        with:
-          ref: add-frontend
-          path: frontend-src
-
+      # ---------- Frontend ----------
       - name: Build & Push Frontend
         uses: docker/build-push-action@v5
         with:
-          context: ./frontend-src/frontend
+          context: ./frontend
           push: true
           tags: |
             techcoms/food-frontend:latest
             techcoms/food-frontend:${{ github.sha }}
 
-      # ---------------- Orders ----------------
+      # ---------- Orders ----------
       - name: Build & Push Orders
         uses: docker/build-push-action@v5
         with:
@@ -52,7 +43,7 @@ jobs:
             techcoms/orders:latest
             techcoms/orders:${{ github.sha }}
 
-      # ---------------- Payments ----------------
+      # ---------- Payments ----------
       - name: Build & Push Payments
         uses: docker/build-push-action@v5
         with:
@@ -62,7 +53,7 @@ jobs:
             techcoms/payments:latest
             techcoms/payments:${{ github.sha }}
 
-      # ---------------- Options ----------------
+      # ---------- Options ----------
       - name: Build & Push Options
         uses: docker/build-push-action@v5
         with:
@@ -72,7 +63,7 @@ jobs:
             techcoms/options:latest
             techcoms/options:${{ github.sha }}
 
-      # ---------------- Images ----------------
+      # ---------- Images ----------
       - name: Build & Push Images
         uses: docker/build-push-action@v5
         with:
@@ -81,21 +72,3 @@ jobs:
           tags: |
             techcoms/images:latest
             techcoms/images:${{ github.sha }}
-name: Docker Image CI
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-jobs:
-
-  build:
-
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
