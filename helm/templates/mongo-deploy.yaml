@@ -43,11 +43,14 @@ spec:
             limits:
               cpu: "500m"
               memory: "512Mi"
+
   volumeClaimTemplates:
     - metadata:
         name: mongo-data
       spec:
-        accessModes: ["ReadWriteOnce"]
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: gp2   # 🔥 REQUIRED FIX
         resources:
           requests:
             storage: {{ .Values.mongo.pvc.storage }}
