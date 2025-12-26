@@ -1,8 +1,11 @@
 import React from 'react';
-export default function Header(){
+
+export default function Header({
+  title = '🍔 Foodie — Microservices POC',
+}) {
   return (
-    <header>
-      <h1>🍔 Foodie — Microservices POC</h1>
+    <header className="app-header" role="banner">
+      <h1>{title}</h1>
     </header>
   );
 }
