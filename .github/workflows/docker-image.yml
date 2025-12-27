@@ -31,7 +31,6 @@ jobs:
           push: true
           tags: |
             techcoms/orders:latest
-            techcoms/orders:${{ github.sha }}
 
       # ---------- Payments ----------
       - name: Build & Push Payments
@@ -41,7 +40,6 @@ jobs:
           push: true
           tags: |
             techcoms/payments:latest
-            techcoms/payments:${{ github.sha }}
 
       # ---------- Options ----------
       - name: Build & Push Options
@@ -51,7 +49,6 @@ jobs:
           push: true
           tags: |
             techcoms/options:latest
-            techcoms/options:${{ github.sha }}
 
       # ---------- Images ----------
       - name: Build & Push Images
@@ -61,4 +58,3 @@ jobs:
           push: true
           tags: |
             techcoms/images:latest
-            techcoms/images:${{ github.sha }}
