@@ -65,18 +65,5 @@ router.get('/', (req, res) => {
   );
 });
 
-/**
- * Serve image file
- * GET /api/images/:filename
- */
-router.get('/:filename', (req, res) => {
-  const filePath = path.join(uploadDir, req.params.filename);
-
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).send('File not found');
-  }
-
-  res.sendFile(filePath);
-});
 
 module.exports = router;

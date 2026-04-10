@@ -71,24 +71,24 @@ router.get('/:id', async (req, res) => {
  */
 router.put('/:id/status', async (req, res) => {
   try {
-    const allowedStatuses = [
-      'CREATED',
-      'PAID',
-      'CANCELLED',
-      'COMPLETED',
-    ];
-
     const { status } = req.body;
-
-    if (!allowedStatuses.includes(status)) {
-      return res.status(400).json({
-        message: `Status must be one of ${allowedStatuses.join(', ')}`,
-      });
-    }
 
     const order = await Order.findById(req.params.id);
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
+    }
+
+    const validTransitions = {
+      'CREATED': ['PAID', 'CANCELLED'],
+      'PAID': ['COMPLETED', 'CANCELLED'],
+      'CANCELLED': [],
+      'COMPLETED': []
+    };
+
+    if (!validTransitions[order.status].includes(status)) {
+      return res.status(400).json({
+        message: `Cannot transition order from ${order.status} to ${status}`,
+      });
     }
 
     order.status = status;

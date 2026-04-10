@@ -6,10 +6,13 @@ if (!MONGO_URI) {
   throw new Error('MONGO_URI environment variable is not defined');
 }
 
-mongoose.connect(MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Prevent multiple connections
+if (mongoose.connection.readyState === 0) {
+  mongoose.connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+}
 
 mongoose.connection.on('connected', () => {
   console.log('MongoDB connected');

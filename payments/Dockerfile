@@ -4,4 +4,5 @@ COPY package*.json ./
 RUN npm install --omit=dev
 COPY . .
 EXPOSE 4003
+USER node
 CMD ["node", "app.js"]
