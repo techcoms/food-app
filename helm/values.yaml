@@ -1,5 +1,5 @@
 imagePullSecrets: []
-imagePullPolicy: IfNotPresent
+imagePullPolicy: Always
 
 mongo:
   enabled: true
