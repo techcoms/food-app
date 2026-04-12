@@ -15,15 +15,20 @@ spec:
         app: {{ include "food-app.fullname" . }}-images
         component: images
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: images
           image: "{{ .Values.images.image.repository }}:{{ .Values.images.image.tag }}"
           imagePullPolicy: {{ .Values.imagePullPolicy | default "IfNotPresent" }}
           ports:
             - containerPort: {{ .Values.images.port }}
+          volumeMounts:
+            - name: uploads-dir
+              mountPath: /data/uploads
           env:
             - name: MONGO_URI
-              value: {{ .Values.commonEnv.MONGO_URI | quote }}
+              value: "mongodb://{{ include \"food-app.fullname\" . }}-mongo:27017/fooddb"
           readinessProbe:
             httpGet:
               path: /health
@@ -36,6 +41,9 @@ spec:
               port: {{ .Values.images.port }}
             initialDelaySeconds: 15
             periodSeconds: 20
+      volumes:
+        - name: uploads-dir
+          emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
